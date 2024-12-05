@@ -22,3 +22,27 @@ internal/server/server.go
 
 ## Models: database model and server model
 
+internal/models/model_status.go
+
+## Set up docker
+
+make sure no docker image running
+
+    docker ps
+
+run docker script
+
+    cd dat
+    ./postgres_start.sh
+
+## Wire the service
+
+modify main()
+
+Run the server by click run icon at func main()
+
+Install http and then run http
+
+    sudo snap install http
+
+    http :8080/readiness

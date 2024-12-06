@@ -12,6 +12,8 @@ type Server interface {
 	Start() error
 	Readiness(ctx echo.Context) error
 	Liveness(ctx echo.Context) error
+
+	GetAllCustomers(ctx echo.Context) error
 }
 
 type EchoServer struct {
@@ -39,6 +41,9 @@ func (s *EchoServer) Start() error {
 func (s *EchoServer) registerRoutes() {
 	s.echo.GET("/readiness", s.Readiness)
 	s.echo.GET("/liveness", s.Liveness)
+
+	cg := s.echo.Group("/customers")
+	cg.GET("", s.GetAllCustomers)
 }
 
 func (s *EchoServer) Readiness(ctx echo.Context) error {
@@ -52,3 +57,13 @@ func (s *EchoServer) Readiness(ctx echo.Context) error {
 func (s *EchoServer) Liveness(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, models.Health{Status: "OK"})
 }
+
+//func (s *EchoServer) GetAllCustomers(ctx echo.Context) error {
+//	emailAddress := ctx.QueryParam("email")
+//	customer, err := s.DB.GetCustomerByEmail(emailAddress)
+//	if err != nil {
+//		return ctx.JSON(http.StatusInternalServerError, models.Health{Status: "Failure"})
+//	}
+//	return ctx.JSON(http.StatusOK, customer)
+//
+//}

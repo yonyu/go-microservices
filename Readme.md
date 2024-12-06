@@ -46,3 +46,12 @@ Install http and then run http
     sudo snap install http
 
     http :8080/readiness
+
+GetAll operations
+
+Create schema and import data
+
+http :8080/customers
+
+http :8080/customers emailAddress=="turpis@loremvehicula.com"
+

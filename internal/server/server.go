@@ -14,6 +14,7 @@ type Server interface {
 	Liveness(ctx echo.Context) error
 
 	GetAllCustomers(ctx echo.Context) error
+	GetAllProducts(ctx echo.Context) error
 }
 
 type EchoServer struct {
@@ -21,6 +22,7 @@ type EchoServer struct {
 	DB   database.DatabaseClient
 }
 
+// NewEchoServer creates a new EchoServer and registers routers
 func NewEchoServer(db database.DatabaseClient) Server {
 	server := &EchoServer{
 		echo: echo.New(),
@@ -30,6 +32,7 @@ func NewEchoServer(db database.DatabaseClient) Server {
 	return server
 }
 
+// Start calls echo.Start() to start the web server
 func (s *EchoServer) Start() error {
 	if err := s.echo.Start(":8080"); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("Server shutdown occurred: #{err}")
@@ -44,6 +47,9 @@ func (s *EchoServer) registerRoutes() {
 
 	cg := s.echo.Group("/customers")
 	cg.GET("", s.GetAllCustomers)
+
+	cg = s.echo.Group("/products")
+	cg.GET("", s.GetAllProducts)
 }
 
 func (s *EchoServer) Readiness(ctx echo.Context) error {
@@ -57,13 +63,3 @@ func (s *EchoServer) Readiness(ctx echo.Context) error {
 func (s *EchoServer) Liveness(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, models.Health{Status: "OK"})
 }
-
-//func (s *EchoServer) GetAllCustomers(ctx echo.Context) error {
-//	emailAddress := ctx.QueryParam("email")
-//	customer, err := s.DB.GetCustomerByEmail(emailAddress)
-//	if err != nil {
-//		return ctx.JSON(http.StatusInternalServerError, models.Health{Status: "Failure"})
-//	}
-//	return ctx.JSON(http.StatusOK, customer)
-//
-//}

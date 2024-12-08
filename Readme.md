@@ -47,7 +47,12 @@ Install http and then run http
 
     http :8080/readiness
 
-GetAll operations
+## GetAll operations
+
+### Implemented customer table and GetAllCustomers
+
+internal/models/model_customer.go
+internal/database/database_customer.go
 
 Create schema and import data
 
@@ -55,3 +60,13 @@ http :8080/customers
 
 http :8080/customers emailAddress=="turpis@loremvehicula.com"
 
+### Implement Product table and GetAll
+
+internal/models/model_product.go
+internal/database/database_product.go
+internal/database/client.go DatabaseClient: DatabaseClient
+internal/server/product.go
+internal/server/server.go
+
+run server
+http :8080/products

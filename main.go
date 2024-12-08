@@ -6,6 +6,8 @@ import (
 	"log"
 )
 
+// Create a database client, and then create the server.
+// Call Start() on the created server instance.
 func main() {
 	db, err := database.NewDatabaseClient()
 	if err != nil {

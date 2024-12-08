@@ -56,8 +56,8 @@ internal/database/database_customer.go
 
 Create schema and import data
 
+run main()
 http :8080/customers
-
 http :8080/customers emailAddress=="turpis@loremvehicula.com"
 
 ### Implement Product table and GetAll
@@ -68,5 +68,15 @@ internal/database/client.go DatabaseClient: DatabaseClient
 internal/server/product.go
 internal/server/server.go
 
-run server
+run main()
 http :8080/products
+
+### Implement Vendor table and GetAll
+internal/models/model_vendor.go
+internal/database/database_vendor.go
+internal/database/client.go DatabaseClient: DatabaseClient
+internal/server/vendor.go
+internal/server/server.go
+
+run main()
+http :8080/vendors

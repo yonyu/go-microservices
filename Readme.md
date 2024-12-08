@@ -80,3 +80,13 @@ internal/server/server.go
 
 run main()
 http :8080/vendors
+
+### Implement Service table and GetAll
+internal/models/model_service.go
+internal/database/database_service.go
+internal/database/client.go DatabaseClient: DatabaseClient
+internal/server/service.go
+internal/server/server.go 
+
+run main()
+http :8080/services

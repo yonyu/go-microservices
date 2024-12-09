@@ -1,4 +1,6 @@
 # Create a Microservice with Golang
+This microservice implements CRUD operations on a PostgresDB hosted in
+a docker container.
 
 ## Initialize the go module
 
@@ -90,3 +92,16 @@ internal/server/server.go
 
 run main()
 http :8080/services
+
+## Create operations
+
+### Create customer
+
+internal/database/database_customer.go: AddCustomer()
+internal/database/client.go: add AddCustomer() to DatabaseClient
+internal/server/customer.go: AddCustomer()
+internal/server/server.go: paste AddCustomer() to Server and  add it to registerRoutes()
+
+run main()
+http POST :8080/customers firstName=John lastName=Doe emailAddress="jdoe@example.com" phoneNumber="515-555-1234" address="123 Main St; Anytown, KS 66854"
+ 

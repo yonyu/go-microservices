@@ -1,11 +1,12 @@
 package server
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/yonyu/go-microservices/internal/database"
 	"github.com/yonyu/go-microservices/internal/models"
-	"log"
-	"net/http"
 )
 
 type Server interface {
@@ -14,8 +15,12 @@ type Server interface {
 	Liveness(ctx echo.Context) error
 
 	GetAllCustomers(ctx echo.Context) error
+	AddCustomer(ctx echo.Context) error
+
 	GetAllProducts(ctx echo.Context) error
+
 	GetAllVendors(ctx echo.Context) error
+
 	GetAllServices(ctx echo.Context) error
 }
 
@@ -49,6 +54,7 @@ func (s *EchoServer) registerRoutes() {
 
 	cg := s.echo.Group("/customers")
 	cg.GET("", s.GetAllCustomers)
+	cg.POST("", s.AddCustomer)
 
 	pg := s.echo.Group("/products")
 	pg.GET("", s.GetAllProducts)

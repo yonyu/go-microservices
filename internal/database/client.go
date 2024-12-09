@@ -3,19 +3,24 @@ package database
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/yonyu/go-microservices/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"time"
 )
 
 type DatabaseClient interface {
 	Ready() bool
 
 	GetAllCustomers(ctx context.Context, emailAddress string) ([]models.Customer, error)
+	AddCustomer(ctx context.Context, customer *models.Customer) (*models.Customer, error)
+
 	GetAllProducts(ctx context.Context, vendorID string) ([]models.Product, error)
+
 	GetAllVendors(ctx context.Context) ([]models.Vendor, error)
+
 	GetAllServices(ctx context.Context) ([]models.Service, error)
 }
 

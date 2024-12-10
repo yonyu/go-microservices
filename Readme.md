@@ -104,4 +104,20 @@ internal/server/server.go: paste AddCustomer() to Server and  add it to register
 
 run main()
 http POST :8080/customers firstName=John lastName=Doe emailAddress="jdoe@example.com" phoneNumber="515-555-1234" address="123 Main St; Anytown, KS 66854"
- 
+
+### Create product
+
+internal/database/database_product.go: AddProduct()
+internal/database/client.go: add AddProduct() to DatabaseClient
+internal/server/product.go: AddProduct()
+internal/server/server.go: paste AddProduct() to Server and  add it to registerRoutes()
+
+run main()
+http POST :8080/products name=test2 price:=3.14 vendorId="e27d6cda-ef90-4d92-8f89-648389edb8af"
+Or Use Postman
+{
+    "name":"Test",
+    "price": 3.14,
+    "vendorId": "e27d6cda-ef90-4d92-8f89-648389edb8af"
+}
+

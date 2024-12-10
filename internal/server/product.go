@@ -1,8 +1,11 @@
 package server
 
 import (
-	"github.com/labstack/echo/v4"
 	"net/http"
+
+	"github.com/labstack/echo/v4"
+	"github.com/yonyu/go-microservices/internal/dberrors"
+	"github.com/yonyu/go-microservices/internal/models"
 )
 
 // what should we do here?
@@ -20,4 +23,25 @@ func (s *EchoServer) GetAllProducts(ctx echo.Context) error {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
 	return ctx.JSON(http.StatusOK, products)
+}
+
+func (s *EchoServer) AddProduct(ctx echo.Context) error {
+	product := new(models.Product)
+
+	if err := ctx.Bind(product); err != nil {
+		return ctx.JSON(http.StatusUnsupportedMediaType, err)
+	}
+
+	product, err := s.DB.AddProduct(ctx.Request().Context(), product)
+	if err != nil {
+		switch err.(type) {
+		case *dberrors.ConflictError:
+			return ctx.JSON(http.StatusConflict, err)
+
+		default:
+			return ctx.JSON(http.StatusInternalServerError, err)
+
+		}
+	}
+	return ctx.JSON(http.StatusCreated, product)
 }

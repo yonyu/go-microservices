@@ -121,3 +121,13 @@ Or Use Postman
     "vendorId": "e27d6cda-ef90-4d92-8f89-648389edb8af"
 }
 
+### Create service
+
+internal/database/database_service.go: AddService()
+internal/database/service.go: add AddService() to DatabaseClient
+internal/server/service.go: AddService()
+internal/server/server.go: paste AddService() to Server and  add it to registerRoutes()
+
+run main()
+http POST :8080/services name=Service1 price:=6.99
+

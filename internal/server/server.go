@@ -23,6 +23,7 @@ type Server interface {
 	GetAllVendors(ctx echo.Context) error
 
 	GetAllServices(ctx echo.Context) error
+	AddService(ctx echo.Context) error
 }
 
 type EchoServer struct {
@@ -66,6 +67,7 @@ func (s *EchoServer) registerRoutes() {
 
 	sg := s.echo.Group("/services")
 	sg.GET("", s.GetAllServices)
+	sg.POST("", s.AddService)
 }
 
 func (s *EchoServer) Readiness(ctx echo.Context) error {

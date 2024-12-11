@@ -131,3 +131,12 @@ internal/server/server.go: paste AddService() to Server and  add it to registerR
 run main()
 http POST :8080/services name=Service1 price:=6.99
 
+### Create vendor
+
+internal/database/database_vendor.go: AddVendor()
+internal/database/vendor.go: add AddVendor() to DatabaseClient
+internal/server/vendor.go: AddVendor()
+internal/server/server.go: paste AddVendor() to Server and  add it to registerRoutes()
+
+run main()
+http POST :8080/vendors name=Vendor1 contact="John Smith" phoneNumber="1-777-123-1234" emailAddress="test@gmail.com" address="1234 Main Street, Vancouver, BC V6V 1V1"

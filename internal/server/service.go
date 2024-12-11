@@ -1,10 +1,11 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/yonyu/go-microservices/internal/dberrors"
 	"github.com/yonyu/go-microservices/internal/models"
-	"net/http"
 )
 
 func (s *EchoServer) GetAllServices(ctx echo.Context) error {
@@ -30,4 +31,19 @@ func (s *EchoServer) AddService(ctx echo.Context) error {
 		}
 	}
 	return ctx.JSON(http.StatusCreated, service)
+}
+
+func (s *EchoServer) GetServiceById(ctx echo.Context) error {
+	id := ctx.Param("id")
+
+	service, err := s.DB.GetServiceById(ctx.Request().Context(), id)
+	if err != nil {
+		switch err.(type) {
+		case *dberrors.NotFoundError:
+			return ctx.JSON(http.StatusNotFound, err)
+		default:
+			return ctx.JSON(http.StatusInternalServerError, err)
+		}
+	}
+	return ctx.JSON(http.StatusOK, service)
 }

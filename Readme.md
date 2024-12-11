@@ -152,3 +152,10 @@ internal/server/server.go: paste GetCustomerById() to Server and  add it to regi
 
 run main()
 http :8080/customers/50cb40eb-cdc0-4235-9d8f-f598dcc7b9a9
+
+
+### Get a product, service and vendor by ID
+
+http :8080/products/ff3bef2f-9bf7-4edd-a141-89b312d5fd21
+http :8080/services/8983ca78-37c5-4e78-9b15-2b2899163758
+http :8080/vendors/e27d6cda-ef90-4d92-8f89-648389edb8af

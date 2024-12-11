@@ -140,3 +140,15 @@ internal/server/server.go: paste AddVendor() to Server and  add it to registerRo
 
 run main()
 http POST :8080/vendors name=Vendor1 contact="John Smith" phoneNumber="1-777-123-1234" emailAddress="test@gmail.com" address="1234 Main Street, Vancouver, BC V6V 1V1"
+
+## GetOne operations
+
+### Get a customer by ID
+
+internal/database/database_customer.go: GetCustomerById()
+internal/database/client.go: add GetCustomerById() to DatabaseClient
+internal/server/customer.go: GetCustomerById()
+internal/server/server.go: paste GetCustomerById() to Server and  add it to registerRoutes()
+
+run main()
+http :8080/customers/50cb40eb-cdc0-4235-9d8f-f598dcc7b9a9

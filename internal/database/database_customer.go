@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+
 	"github.com/google/uuid"
 	"github.com/yonyu/go-microservices/internal/dberrors"
 	"github.com/yonyu/go-microservices/internal/models"
@@ -26,6 +27,22 @@ func (c Client) AddCustomer(ctx context.Context, customer *models.Customer) (*mo
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
 			return nil, &dberrors.ConflictError{}
+		}
+		return nil, result.Error
+	}
+	return customer, nil
+}
+
+func (c Client) GetCustomerById(ctx context.Context, customerID string) (*models.Customer, error) {
+	customer := &models.Customer{}
+
+	result := c.DB.WithContext(ctx).
+		Where(models.Customer{CustomerID: customerID}).
+		First(&customer)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, &dberrors.NotFoundError{Entity: "customer", ID: customerID}
 		}
 		return nil, result.Error
 	}

@@ -8,6 +8,7 @@ import (
 	"github.com/yonyu/go-microservices/internal/dberrors"
 	"github.com/yonyu/go-microservices/internal/models"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func (c Client) GetAllCustomers(ctx context.Context, emailAddress string) ([]models.Customer, error) {
@@ -47,4 +48,30 @@ func (c Client) GetCustomerById(ctx context.Context, customerID string) (*models
 		return nil, result.Error
 	}
 	return customer, nil
+}
+
+func (c Client) UpdateCustomer(ctx context.Context, customer *models.Customer) (*models.Customer, error) {
+	var customers []models.Customer
+	result := c.DB.WithContext(ctx).
+		Model(&customers).
+		Clauses(clause.Returning{}).
+		Where(&models.Customer{CustomerID: customer.CustomerID}).
+		Updates(models.Customer{
+			FirstName: customer.FirstName,
+			LastName:  customer.LastName,
+			Email:     customer.Email,
+			Phone:     customer.Phone,
+			Address:   customer.Address,
+		})
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
+			return nil, &dberrors.ConflictError{}
+		}
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, &dberrors.NotFoundError{Entity: "customer", ID: customer.CustomerID}
+	}
+	return &customers[0], nil
 }

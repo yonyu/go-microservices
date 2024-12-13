@@ -159,3 +159,15 @@ http :8080/customers/50cb40eb-cdc0-4235-9d8f-f598dcc7b9a9
 http :8080/products/ff3bef2f-9bf7-4edd-a141-89b312d5fd21
 http :8080/services/8983ca78-37c5-4e78-9b15-2b2899163758
 http :8080/vendors/e27d6cda-ef90-4d92-8f89-648389edb8af
+
+## Update operations
+
+### Update customer
+
+internal/database/database_customer.go: UpdateCustomer()
+internal/database/client.go: add UpdateCustomer() to DatabaseClient
+internal/server/customer.go: UpdateCustomer()
+internal/server/server.go: paste UpdateCustomer() to Server and add it to registerRoutes()
+
+run main()
+http PUT :8080/customers/50cb40eb-cdc0-4235-9d8f-f598dcc7b9a9 customerId="50cb40eb-cdc0-4235-9d8f-f598dcc7b9a9" firstName=John lastName=Doe emailAddress="jdoe@example.com" phoneNumber="515-555-1234" address="1234 Main St; Anytown, KS 66854"

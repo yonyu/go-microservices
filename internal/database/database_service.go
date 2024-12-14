@@ -8,6 +8,7 @@ import (
 	"github.com/yonyu/go-microservices/internal/dberrors"
 	"github.com/yonyu/go-microservices/internal/models"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func (c Client) GetAllServices(ctx context.Context) ([]models.Service, error) {
@@ -41,4 +42,27 @@ func (c Client) GetServiceById(ctx context.Context, serviceId string) (*models.S
 		return nil, result.Error
 	}
 	return service, nil
+}
+
+func (c Client) UpdateService(ctx context.Context, service *models.Service) (*models.Service, error) {
+	var services []models.Service
+
+	result := c.DB.WithContext(ctx).
+		Model(&services).
+		Clauses(clause.Returning{}).
+		Where(models.Service{ServiceId: service.ServiceId}).
+		Updates(models.Service{
+			Name:  service.Name,
+			Price: service.Price,
+		})
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
+			return nil, &dberrors.ConflictError{}
+		}
+	}
+	if result.RowsAffected == 0 {
+		return nil, &dberrors.NotFoundError{Entity: "Service", ID: service.ServiceId}
+	}
+	return &services[0], nil
 }

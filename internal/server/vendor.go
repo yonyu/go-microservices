@@ -50,3 +50,27 @@ func (s *EchoServer) GetVendorById(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, vendor)
 }
+
+func (s *EchoServer) UpdateVendor(ctx echo.Context) error {
+	id := ctx.Param("id")
+	vendor := new(models.Vendor)
+	if err := ctx.Bind(vendor); err != nil {
+		return ctx.JSON(http.StatusUnsupportedMediaType, err)
+	}
+	if id != vendor.VendorID {
+		return ctx.JSON(http.StatusBadRequest, "id on path doesn't match id on body")
+	}
+
+	vendor, err := s.DB.UpdateVendor(ctx.Request().Context(), vendor)
+	if err != nil {
+		switch err.(type) {
+		case *dberrors.NotFoundError:
+			return ctx.JSON(http.StatusNotFound, err)
+		case *dberrors.ConflictError:
+			return ctx.JSON(http.StatusConflict, err)
+		default:
+			return ctx.JSON(http.StatusInternalServerError, err)
+		}
+	}
+	return ctx.JSON(http.StatusOK, vendor)
+}

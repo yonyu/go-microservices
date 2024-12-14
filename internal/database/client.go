@@ -22,14 +22,17 @@ type DatabaseClient interface {
 	GetAllProducts(ctx context.Context, vendorID string) ([]models.Product, error)
 	AddProduct(ctx context.Context, product *models.Product) (*models.Product, error)
 	GetProductById(ctx context.Context, productId string) (*models.Product, error)
+	UpdateProduct(ctx context.Context, product *models.Product) (*models.Product, error)
 
 	GetAllVendors(ctx context.Context) ([]models.Vendor, error)
 	AddVendor(ctx context.Context, vendor *models.Vendor) (*models.Vendor, error)
 	GetVendorById(ctx context.Context, vendorId string) (*models.Vendor, error)
+	UpdateVendor(ctx context.Context, vendor *models.Vendor) (*models.Vendor, error)
 
 	GetAllServices(ctx context.Context) ([]models.Service, error)
 	AddService(ctx context.Context, service *models.Service) (*models.Service, error)
 	GetServiceById(ctx context.Context, serviceId string) (*models.Service, error)
+	UpdateService(ctx context.Context, service *models.Service) (*models.Service, error)
 }
 
 type Client struct {

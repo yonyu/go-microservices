@@ -8,6 +8,7 @@ import (
 	"github.com/yonyu/go-microservices/internal/dberrors"
 	"github.com/yonyu/go-microservices/internal/models"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func (c Client) GetAllVendors(ctx context.Context) ([]models.Vendor, error) {
@@ -46,4 +47,30 @@ func (c Client) GetVendorById(ctx context.Context, vendorId string) (*models.Ven
 		return nil, result.Error
 	}
 	return vendor, nil
+}
+
+func (c Client) UpdateVendor(ctx context.Context, vendor *models.Vendor) (*models.Vendor, error) {
+	var vendors []models.Vendor
+
+	result := c.DB.WithContext(ctx).
+		Model(&vendors).
+		Clauses(clause.Returning{}).
+		Where(models.Vendor{VendorID: vendor.VendorID}).
+		Updates(models.Vendor{
+			Address: vendor.Address,
+			Contact: vendor.Contact,
+			Email:   vendor.Email,
+			Name:    vendor.Name,
+			Phone:   vendor.Phone,
+		})
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
+			return nil, &dberrors.ConflictError{}
+		}
+	}
+	if result.RowsAffected == 0 {
+		return nil, &dberrors.NotFoundError{Entity: "Vendor", ID: vendor.VendorID}
+	}
+	return &vendors[0], nil
 }

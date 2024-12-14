@@ -171,3 +171,16 @@ internal/server/server.go: paste UpdateCustomer() to Server and add it to regist
 
 run main()
 http PUT :8080/customers/50cb40eb-cdc0-4235-9d8f-f598dcc7b9a9 customerId="50cb40eb-cdc0-4235-9d8f-f598dcc7b9a9" firstName=John lastName=Doe emailAddress="jdoe@example.com" phoneNumber="515-555-1234" address="1234 Main St; Anytown, KS 66854"
+
+
+### Update product, service and vendor
+
+internal/database/database_customer.go: UpdateCustomer()
+internal/database/client.go: add UpdateCustomer() to DatabaseClient
+internal/server/customer.go: UpdateCustomer()
+internal/server/server.go: paste UpdateCustomer() to Server and add it to registerRoutes()
+
+run main()
+http PUT :8080/products/ff3bef2f-9bf7-4edd-a141-89b312d5fd21 productId="ff3bef2f-9bf7-4edd-a141-89b312d5fd21" name=test3 price:=3.15 vendorId="e27d6cda-ef90-4d92-8f89-648389edb8af"
+http PUT :8080/services/45763e43-e7e3-4114-8eb1-ca7f0cc2d88a serviceId="45763e43-e7e3-4114-8eb1-ca7f0cc2d88a" name=Service2 price:=7.99
+http PUT :8080/vendors/1eda44e0-d29e-4df8-86c3-dee8d578e34b vendorId="1eda44e0-d29e-4df8-86c3-dee8d578e34b" name="vendor2" phoneNumber="1-777-123-1234" emailAddress="test@gmail.com" address="1234 Main Street, Vancouver, BC V6V 1V1"

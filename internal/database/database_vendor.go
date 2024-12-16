@@ -74,3 +74,16 @@ func (c Client) UpdateVendor(ctx context.Context, vendor *models.Vendor) (*model
 	}
 	return &vendors[0], nil
 }
+
+func (c Client) DeleteVendor(ctx context.Context, vendorId string) error {
+	result := c.DB.WithContext(ctx).
+		Delete(&models.Vendor{VendorID: vendorId})
+
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return &dberrors.NotFoundError{Entity: "Vendor", ID: vendorId}
+	}
+	return nil
+}

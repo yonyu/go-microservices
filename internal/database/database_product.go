@@ -73,5 +73,17 @@ func (c Client) UpdateProduct(ctx context.Context, product *models.Product) (*mo
 		return nil, &dberrors.NotFoundError{Entity: "Product", ID: product.ProductID}
 	}
 	return &products[0], nil
+}
 
+func (c Client) DeleteProduct(ctx context.Context, productId string) error {
+	result := c.DB.WithContext(ctx).
+		Delete(&models.Product{ProductID: productId})
+
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return &dberrors.NotFoundError{Entity: "Product", ID: productId}
+	}
+	return nil
 }

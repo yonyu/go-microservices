@@ -47,7 +47,7 @@ func (s *EchoServer) AddProduct(ctx echo.Context) error {
 }
 
 func (s *EchoServer) GetProductById(ctx echo.Context) error {
-	id := ctx.Param(":id")
+	id := ctx.Param("id")
 	product, err := s.DB.GetProductById(ctx.Request().Context(), id)
 
 	if err != nil {
@@ -85,4 +85,18 @@ func (s *EchoServer) UpdateProduct(ctx echo.Context) error {
 		}
 	}
 	return ctx.JSON(http.StatusOK, product)
+}
+
+func (s *EchoServer) DeleteProduct(ctx echo.Context) error {
+	id := ctx.Param("id")
+	err := s.DB.DeleteProduct(ctx.Request().Context(), id)
+	if err != nil {
+		switch err.(type) {
+		case *dberrors.NotFoundError:
+			return ctx.JSON(http.StatusNotFound, err)
+		default:
+			return ctx.JSON(http.StatusInternalServerError, err)
+		}
+	}
+	return ctx.NoContent(http.StatusResetContent)
 }

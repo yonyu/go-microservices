@@ -197,3 +197,11 @@ internal/server/server.go: paste DeleteCustomer() to Server and add it to regist
 
 run main()
 http DELETE :8080/customers/c746916f-a421-4d4c-8876-e13eab4d8b29
+
+### Delete product, service and vendor
+
+test
+
+http DELETE :8080/products/996b6e86-82d9-4beb-981b-eb677c81637f
+http DELETE :8080/services/
+http DELETE :8080/vendors/dd909559-37a0-4f95-ae15-10127d818df7
